@@ -14,10 +14,10 @@ router.get("/", (req, res) => {
 
 router.put("/invite",protect, (req, res) => {
 
-// Mendapatkan data dari body permintaan
+// mendapatkan data dari body request
 const invite = req.body;
 
-// Mendapatkan pengguna yang sedang login dari middleware protect
+// mendapatkan pengguna yang sedang login dari middleware protect
 const loggedInUser = req.user;
 
 console.log(invite.user_id);
@@ -28,24 +28,23 @@ if (loggedInUser.id === invite.student_id) {
   if (student) {
     const existingUserRole = student.users_role.find((role) => role.user_id === invite.user_id);
   
-
   if (existingUserRole) {
-    // Jika user_role sudah ada, edit rolenya
+    // jika user_role sudah ada, edit rolenya
     existingUserRole.role = invite.role;
   } else {
-    // Jika user_role belum ada, tambahkan data baru
+    // jika user_role belum ada, tambahkan data baru
     student.users_role.push({ user_id: invite.user_id, role: invite.role });
   }
 
-  // Kemudian kirim respons yang sesuai
+  // kirim respons yang sesuai
   return res.json({ STUDENTS });
 
 } else {
-    // Jika student dengan id tertentu tidak ditemukan
+    // jika student dengan id tertentu tidak ditemukan
     return res.status(404).json({ message: "Student not found" });
   }
 } else {
-    // Jika pengguna tidak memiliki izin, kirim pesan error dengan status code 403
+    // jika pengguna tidak memiliki izin, kirim pesan error dengan status code 403
     return res.status(403).json({ message: "Access denied" });
   }
 });
@@ -59,7 +58,6 @@ router.get("/:id", protect, (req, res) => {
   if (user.id !== +loggedInUser.id) {
     delete user.username;
     delete user.password;
-
   }
 
   return res.json({
